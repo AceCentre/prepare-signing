@@ -64,6 +64,8 @@ async function run() {
     const bundleIdentifier = core.getInput(`bundleIdentifier`);
     const signType = core.getInput(`signType`);
 
+    console.log(bundleIdentifier);
+
     const token = getToken(issuerID, 2, Buffer.from(appStoreConnectPrivateKey, "utf8"), keyID);
     const bundleIdResponse = await get("https://api.appstoreconnect.apple.com/v1/bundleIds", { "filter[identifier]": bundleIdentifier }, token); // BundleIdsResponse Type
     const bundleId = bundleIdResponse.data.find(element => element.attributes.identifier == bundleIdentifier);
@@ -71,6 +73,8 @@ async function run() {
     if (bundleId) {
       const profileIds = await get(`https://api.appstoreconnect.apple.com/v1/bundleIds/${bundleId.id}/relationships/profiles`, { }, token);  
       const rawProfileIds = profileIds.data.map(profile => profile.id);
+
+      console.log(rawProfileIds)
 
       if (rawProfileIds) {
         const profilesResponse = await get("https://api.appstoreconnect.apple.com/v1/profiles", { "filter[id]": `${rawProfileIds}`, "filter[profileType]": signType }, token); // ProfilesResponse Type
