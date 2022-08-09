@@ -94,7 +94,10 @@ async function run() {
     }
   
   } catch (error) {
+    console.log('real logging start');
     console.log(error);
+    console.log(JSON.stringify(error, null, 2))
+    console.log('real logging end');
     core.setFailed(error.message);
   }
 } 
